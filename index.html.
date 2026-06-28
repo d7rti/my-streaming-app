@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My App</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #121212; color: white; padding: 20px; }
+        input { padding: 10px; width: 80%; margin-bottom: 20px; border-radius: 5px; border: none; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #app { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <h2>أدخل كود الدخول</h2>
+        <input type="password" id="pass" placeholder="الكود">
+        <br>
+        <button onclick="checkLogin()">دخول</button>
+    </div>
+
+    <div id="app">
+        <h1>القنوات المباشرة</h1>
+        <div id="content"></div>
+    </div>
+
+    <script>
+        // ضع رابط الـ Gist الخاص بك هنا
+        const CONFIG_URL = "https://gist.githubusercontent.com/d7rti/5432a36585c7622c8d78f3a7c5e7a8d7/raw/b1646c93b62b1eebca8e732904faedb2fee5fb04/goaltv.json";
+
+        async function checkLogin() {
+            const userInput = document.getElementById('pass').value;
+            const res = await fetch(CONFIG_URL);
+            const data = await res.json();
+
+            if (userInput === data.access_code) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                document.getElementById('content').innerHTML = `<video controls src="${data.stream_url}" width="100%"></video>`;
+            } else {
+                alert("كود خاطئ!");
+            }
+        }
+    </script>
+</body>
+</html>
